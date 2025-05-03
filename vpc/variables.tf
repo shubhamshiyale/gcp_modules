@@ -1,30 +1,26 @@
 variable "vpc_name" {
-    description = "The name of the VPC network"
-    type        = string
+  type        = string
 }
 
 variable "auto_create_subnetworks" {
-    description = "Whether to auto-create subnetworks"
-    type        = bool
-    default     = false
-}
-
-variable "subnet_name" {
-    description = "The name of the subnet"
-    type        = string
-}
-
-variable "subnet_ip_cidr_range" {
-    description = "The IP CIDR range of the subnet"
-    type        = string
-}
-
-variable "region" {
-    description = "The region where the subnet will be created"
-    type        = string
+  type        = bool
 }
 
 variable "project_id" {
-    description = "The region where the subnet will be created"
-    type        = string
+  type        = string
+}
+
+variable "subnets" {
+  description = "All subnets across all VPCs; module filters based on vpc_key"
+  type        = list(object({
+    subnet_name          = string
+    subnet_ip_cidr_range = string
+    subnet_region        = string
+    vpc_key              = string
+  }))
+}
+
+variable "vpc_key" {
+  description = "Key of the current VPC from parent for_each"
+  type        = string
 }
