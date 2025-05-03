@@ -5,10 +5,11 @@ resource "google_compute_network" "vpc_network" {
     project  = var.project_id
 }
 
-resource "google_compute_subnetwork" "subnet" {
-    name          = var.subnet_name
-    project       = var.project_id
-    ip_cidr_range = var.subnet_ip_cidr_range
-    region        = var.region
-    network       = google_compute_network.vpc_network.id
+resource "google_compute_subnetwork" "subnets" {
+  for_each      = { for s in local.current_subnets : s.subnet_name => s }
+  name          = each.value.subnet_name
+  project       = var.project_id
+  ip_cidr_range = each.value.subnet_ip_cidr_range
+  region        = each.value.subnet_region
+  network       = google_compute_network.this.self_link
 }
